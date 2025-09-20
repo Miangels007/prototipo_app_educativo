@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Plataforma Académica</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f3f3f3;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .container {
+      background-color: white;
+      padding: 2rem;
+      border-radius: 25px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+    }
+    h1, h2, h3 {
+      margin-bottom: 1rem;
+    }
+    label {
+      display: block;
+      text-align: left;
+      font-weight: bold;
+      margin-top: 1rem;
+    }
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 0.5rem;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+    }
+    .form-group {
+      margin-bottom: 1rem;
+    }
+    .right-link {
+      float: right;
+      font-size: 0.9rem;
+      margin-top: -1.5rem;
+    }
+    .right-link a, .extra-link a {
+      color: #4b0082;
+      text-decoration: underline;
+    }
+    .button {
+      background-color: #444;
+      color: white;
+      font-size: 1.2rem;
+      padding: 0.7rem 0;
+      border: none;
+      width: 100%;
+      border-radius: 20px;
+      cursor: pointer;
+      margin-top: 1rem;
+    }
+    .output {
+      background-color: #eee;
+      padding: 1rem;
+      border-radius: 20px;
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container" id="loginPage">
+    <h1>Iniciar sesión</h1>
+    <form id="loginForm">
+      <label for="email">Correo electrónico</label>
+      <input type="email" id="email" placeholder="Ingrese su correo" required />
+
+      <div class="form-group">
+        <label for="password">Contraseña</label>
+        <div class="right-link">
+          <a href="#" onclick="alert('Redirigiendo a recuperación de contraseña')">¿Olvidó su contraseña?</a>
+        </div>
+        <input type="password" id="password" placeholder="Ingrese su contraseña" required />
+      </div>
+
+      <button type="submit" class="button">Ingresar</button>
+    </form>
+    <div class="extra-link">
+      ¿No tiene cuenta? <a href="#" onclick="alert('Redirigiendo a crear cuenta')">Crear cuenta</a>
+    </div>
+  </div>
+
+  <div class="container" id="cursosPage" style="display:none;">
+    <h2>Inicio</h2>
+    <div class="output" id="welcomeMsg"></div>
+
+    <label for="ciclo">Ciclo académico</label>
+    <select id="ciclo">
+      <option>Primer semestre</option>
+      <option>Segundo semestre</option>
+      <option>Primer trimestre</option>
+      <option>Segundo trimestre</option>
+      <option>Tercer trimestre</option>
+      <option>Cuarto trimestre</option>
+    </select>
+
+    <label for="carrera">Carrera</label>
+    <select id="carrera">
+      <option>Ingeniería en Sistemas</option>
+      <option>Administración de Empresas</option>
+      <option>Psicología</option>
+      <option>Contaduría Pública</option>
+      <option>Medicina</option>
+      <option>Diseño Gráfico</option>
+    </select>
+
+    <label for="docente">Docente</label>
+    <select id="docente">
+      <option>Lic. Marta López</option>
+      <option>Dr. Juan Pérez</option>
+      <option>Ing. Sofía González</option>
+      <option>Mtro. Carlos Ruiz</option>
+    </select>
+
+    <button class="button" onclick="asignarCursos()">Asignar cursos</button>
+
+    <h3>Cursos asignados</h3>
+    <div class="output" id="resultado">(sin cursos)</div>
+
+    <button class="button" onclick="goToPago()">Ir a Pagar</button>
+  </div>
+
+  <div class="container" id="pagoPage" style="display:none;">
+    <h2>Pago en línea</h2>
+    <p><strong>Monto a pagar:</strong> Q <strong>2.500.00</strong></p>
+    <input type="text" placeholder="Número de tarjeta">
+    <div style="display:flex; gap:10px; margin-top: 1rem;">
+      <input type="text" placeholder="MM/AA" style="flex:1">
+      <input type="text" placeholder="CVC" style="flex:1">
+    </div>
+    <button class="button" onclick="confirmarPago()">Pagar</button>
+  </div>
+
+  <div class="container" id="graciasPage" style="display:none;">
+    <h2>¡Gracias!</h2>
+    <p>Tu pago ha sido procesado con éxito.</p>
+  </div>
+
+  <script>
+    document.getElementById('loginForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+      const email = document.getElementById('email').value;
+      localStorage.setItem('userEmail', email);
+      document.getElementById('loginPage').style.display = 'none';
+      document.getElementById('cursosPage').style.display = 'block';
+      document.getElementById('welcomeMsg').innerText = `Bienvenido, ${email}`;
+    });
+
+    function asignarCursos() {
+      const ciclo = document.getElementById('ciclo').value;
+      const carrera = document.getElementById('carrera').value;
+      const docente = document.getElementById('docente').value;
+      const cursos = `Asignado: ${ciclo} - ${carrera} | Docente: ${docente}`;
+      document.getElementById('resultado').innerText = cursos;
+    }
+
+    function goToPago() {
+      document.getElementById('cursosPage').style.display = 'none';
+      document.getElementById('pagoPage').style.display = 'block';
+    }
+
+    function confirmarPago() {
+      document.getElementById('pagoPage').style.display = 'none';
+      document.getElementById('graciasPage').style.display = 'block';
+    }
+  </script>
+</body>
+</html>
